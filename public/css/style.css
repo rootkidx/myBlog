@@ -273,6 +273,14 @@ img {
     white-space: pre-wrap;
 }
 
+.article img {
+    width: 35%;
+    display: block;
+  margin-left: auto;
+  margin-right: auto;
+    
+}
+
 /* footer  */
 .footer {
     margin: 4rem;

@@ -4,14 +4,29 @@ const express = require('express');
 const expressLayout = require('express-ejs-layouts');
 const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const cors = require('cors');
+const fetch = require('node-fetch');
 
 const connectDB = require('./server/config/db');
 const { isActiveRoute } = require('./server/helpers/routeHelpers');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+
+
+const corsOptions = {
+  origin: '*', // Adjust this to allow specific origins
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  // optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
+
   
 // Connect to DB
 connectDB();

@@ -8,8 +8,6 @@ const jwt = require('jsonwebtoken')
 const adminLayout = '../views/layouts/admin.ejs';
 const jwtSecret = process.env.JWT_SECRET;
 
-
-
 /**
 *
 *Check login
@@ -30,8 +28,6 @@ const authMiddleware = (req, res, next) => {
   }
 
 }
-
-
 
 /**
  * GET /
@@ -60,15 +56,16 @@ router.post('/admin', async (req, res) => {
     const { username, password } = req.body;
 
     const user = await User.findOne({ username });
-
+    
     if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).redirect('/admin');
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).redirect('/admin');
+      
     }
 
     const token = jwt.sign({ userId: user._id }, jwtSecret);
@@ -197,24 +194,6 @@ router.put('/edit-post/:id', authMiddleware, async (req, res) => {
   }
 
 });
-
-
-// router.post('/admin', async (req, res) => {
-//   try {
-
-//     const { username, password } = req.body;
-
-
-//     if (req.body.username === 'admin' && req.body.password === 'password') {
-//       res.send('You are logged in');
-//     } else {
-//       res.send('wrong username or password');
-//     }
-
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
 
 /**
 * GET /

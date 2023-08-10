@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../models/Post');
+const { marked } = require('marked');
+
 
 /**
  * GET /
@@ -39,35 +41,25 @@ router.get('', async (req, res) => {
 
 });
 
-// router.get('', async (req, res) => {
-//   const locals = {
-//     title: "NodeJs Blog",
-//     description: "Simple Blog created with NodeJs, Express & MongoDb."
-//   }
-
-//   try {
-//     const data = await Post.find();
-//     res.render('index', { locals, data });
-//   } catch (error) {
-//     console.log(error);
-//   }
-
-// });
-
 
 /**
  * GET /
  * Post :id
 */
 router.get('/post/:id', async (req, res) => {
+  
+ 
   try {
     let slug = req.params.id;
 
     const data = await Post.findById({ _id: slug });
 
+    const contentHTML = marked(data.body);
+
     const locals = {
       title: data.title,
       description: "",
+      contentHTML: contentHTML,
     }
 
     res.render('post', {
@@ -130,6 +122,28 @@ router.get('/about', (req, res) => {
 
     res.render('about', {
       currentRoute: '/about'
+    });
+    
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+/**
+ * GET /
+ * Contact
+*/
+router.get('/contact', (req, res) => {
+  try {
+    const locals = {
+      title: "Rootkid Blog",
+      description: ""
+
+    }
+
+    res.render('contact', {
+      currentRoute: '/contact'
     });
     
   } catch (error) {
