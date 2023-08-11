@@ -1,0 +1,14 @@
+<a href="/about-dashboard">&larr; Back</a>
+<div class="admin-title">
+    <h2>View / Edit About</h2>
+
+</div>
+
+<form action="/edit-about/<%= data._id %>?_method=PUT" method="POST">
+
+    <label for="body"><b>Content of About</b></label>
+    <textarea name="body" id ="ide" cols="50" rows="10"><%= data.body %></textarea>
+
+    <input type="submit" value="Update" class="btn">
+
+</form>

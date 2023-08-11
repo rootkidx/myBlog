@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Post = require('../models/Post');
 const User = require('../models/User');
+const About = require('../models/About');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
+const { marked } = require('marked');
 
 const adminLayout = '../views/layouts/admin.ejs';
 const jwtSecret = process.env.JWT_SECRET;
@@ -245,5 +247,86 @@ router.get('/logout', (req, res) => {
   //res.json({ message: 'Logout successful.'});
   res.redirect('/');
 });
+
+
+// **
+//  * GET /
+//  * About Admin Dashboard
+// */
+router.get('/about-dashboard', authMiddleware, async (req, res) => {
+  try {
+    const locals = {
+      title: 'About Dashboard',
+    }
+
+    const data = await About.findOne();
+    const contentHTML = marked(data.body);
+  
+    res.render('admin/about-dashboard', {
+      locals,
+      data,
+      contentHTML,
+      layout: adminLayout
+    });
+
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+router.get('/edit-about/:id', authMiddleware, async (req, res) => {
+  try {
+
+    const locals = {
+      title: "Edit About",
+    };
+
+    const data = await About.findOne({ _id: req.params.id });
+
+    res.render('admin/edit-about', {
+      locals,
+      data,
+      layout: adminLayout
+    })
+
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+router.put('/edit-about/:id', authMiddleware, async (req, res) => {
+  try {
+
+    await About.findByIdAndUpdate(req.params.id, {
+      body: req.body.body,
+      updatedAt: Date.now()
+    });
+
+    res.redirect(`/edit-about/${req.params.id}`);
+
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+// router.post('/add-about', async (req, res) => {
+//   try {
+//     try {
+//       const newAbout = new About({
+//         body: req.body.body
+//       });
+
+//       await About.create(newAbout);
+//     } catch (error) {
+//       console.log(error);
+//     }
+
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
 
 module.exports = router;

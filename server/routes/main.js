@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Post = require('../models/Post');
 const { marked } = require('marked');
+const About = require('../models/About');
 
 
 /**
@@ -112,22 +113,27 @@ router.post('/search', async (req, res) => {
  * GET /
  * About
 */
-router.get('/about', (req, res) => {
+router.get('/about', async (req, res) => {
   try {
-    const locals = {
-      title: "Rootkid Blog",
-      description: ""
 
+    const data = await About.findOne();
+
+    const contentHTML = marked(data.body);
+
+    const locals = {
+      // title: data.title,
+      description: "",
+      contentHTML: contentHTML,
     }
 
     res.render('about', {
-      currentRoute: '/about'
+      locals,
+      data,
+      currentRoute: `/about`
     });
-    
   } catch (error) {
     console.log(error);
   }
-
 });
 
 /**
