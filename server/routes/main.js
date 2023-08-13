@@ -82,7 +82,7 @@ router.get('/post/:id', async (req, res) => {
 router.post('/search', async (req, res) => {
   try {
     const locals = {
-      title: "Seach",
+      title: "Rootkid Blog",
       description: ""
     }
 
@@ -121,7 +121,7 @@ router.get('/about', async (req, res) => {
     const contentHTML = marked(data.body);
 
     const locals = {
-      // title: data.title,
+      title: "Rootkid Blog",
       description: "",
       contentHTML: contentHTML,
     }

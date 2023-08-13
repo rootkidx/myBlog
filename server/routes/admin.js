@@ -256,9 +256,8 @@ router.get('/logout', (req, res) => {
 router.get('/about-dashboard', authMiddleware, async (req, res) => {
   try {
     const locals = {
-      title: 'About Dashboard',
+      title: 'About Dashboard'
     }
-
     const data = await About.findOne();
     const contentHTML = marked(data.body);
   
